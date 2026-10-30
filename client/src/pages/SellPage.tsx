@@ -7,6 +7,7 @@ import {
   type FormEvent,
 } from "react";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 type ListingForm = {
   title: string;
@@ -337,10 +338,10 @@ export default function SellPage() {
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header isSell />
 
-      <main className="min-h-screen bg-[#F7F8F5] px-4 py-10 text-[#1B1F1A]">
+      <main className="flex-1 bg-[#F7F8F5] px-4 py-10 text-[#1B1F1A]">
         <div className="mx-auto max-w-4xl">
           <div className="mb-7">
             <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#2F6B47]">
@@ -600,6 +601,8 @@ export default function SellPage() {
           )}
         </div>
       </main>
-    </>
+
+      <Footer />
+    </div>
   );
 }
