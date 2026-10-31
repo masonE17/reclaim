@@ -34,7 +34,7 @@ export default function App() {
 
             <div className="flex-1 w-full max-w-325 mx-auto p-10">
                 {/* Main page content section */}
-                <div className="w-full flex flex-row justify-between items-stretch gap-5 p-1">
+                <div className="w-full flex flex-row justify-between items-center gap-5 p-1">
                     {/* Content section */}
                     <div className="w-180 flex flex-col justify-between items-start gap-2">
                         <div className="bg-[#E3EDE6] py-2 px-4 rounded-[5px]">
@@ -66,7 +66,7 @@ export default function App() {
                     </div>
 
                     {/* Sign up form section */}
-                    <div className="w-125 border border-[#D9D7D0] bg-[#FFFFFF] rounded-[5px] flex flex-col justify-center items-center gap-3 py-5 shadow-[0_12px_32px_rgba(27,30,28,0.08)]">
+                    <div className="w-125 border border-[#D9D7D0] bg-[#FFFFFF] rounded-[5px] flex flex-col justify-center items-center gap-3 py-7 shadow-[0_12px_32px_rgba(27,30,28,0.08)]">
                         <div className="w-[85%] flex flex-col justify-center items-start">
                             <p className="font-bold text-[#1B1E1C] text-[26px]">Create your profile</p>
                             <p className="text-[#55605A] text-[15px]">Free to join, buy or sell in minutes.</p>
