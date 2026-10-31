@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 
 type HeaderProps = {
+    isMain?: boolean;
     isBrowse?: boolean;
     isSell?: boolean;
     isMessages?: boolean;
@@ -14,7 +15,7 @@ export default function Header({ isBrowse, isSell, isMessages, isCart }: HeaderP
             <div className="w-full max-w-325 flex flex-row justify-between items-center p-1">
                 <Link to="/" className="flex flex-row justify-center items-center gap-1">
                     <img src="/ReClaim-icon.png" alt="ReClaim Logo" className="w-12 h-12" />
-                    <p className="text-[#1B1F1A] font-semibold text-[24px]">ReClaim</p>
+                    <p className="text-[#1B1F1A] font-bold text-[28px]">ReClaim</p>
                 </Link>
                 <div className="flex flex-row justify-center items-center gap-6">
                     <div className="group flex flex-col justify-center items-center">
