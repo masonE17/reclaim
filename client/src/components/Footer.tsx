@@ -15,13 +15,13 @@ export default function Footer() {
                     <div className="w-full max-w-125 h-26 p-1 flex flex-row justify-end items-start gap-12">
                         <div className="flex flex-col justify-center items-start gap-2">
                             <p className="text-[15px] text-[#FFFFFF] font-bold">Marketplace</p>
-                            <Link to="/browse" className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D]">Browse</Link>
-                            <Link to="/sell" className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D]">Sell materials</Link>
+                            <Link to="/browse" className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D] underline">Browse</Link>
+                            <Link to="/sell" className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D] underline">Sell materials</Link>
                         </div>
                         <div className="flex flex-col justify-center items-start gap-2">
                             <p className="text-[15px] text-[#FFFFFF] font-bold">Company</p>
-                            <p className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D]">About</p>
-                            <p className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D]">Contact</p>
+                            <p className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D] underline">About</p>
+                            <p className="text-[11px] text-[#C9CFCB] font-semibold hover:text-[#8A918D] underline">Contact</p>
                         </div>
                     </div>
                 </div>
