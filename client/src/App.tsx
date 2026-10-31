@@ -98,9 +98,9 @@ export default function App() {
             </div>
 
             {/* Companies working with divider section */}
-            <div className="w-full bg-[#1B1E1C] flex justify-center items-center py-3">
+            <div className="w-full bg-[#1B1E1C] flex justify-center items-center h-16">
                 <div className="w-full max-w-325 flex flex-row justify-center items-center gap-12 p-1">
-                    <p className="text-[#C9CFCB] font-bold text-[12px]">WORKING WITH</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">WORKING WITH</p>
                     <div className="border border-[#C9CFCB] p-1 border-dashed rounded-[5px]">
                         <p className="text-[#C9CFCB] font-bold text-[16px]">[Partner Logo]</p>
                     </div>
@@ -122,7 +122,7 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="flex-1 w-full max-w-325 mx-auto p-10">
+            <div className="flex-1 w-full max-w-325 mx-auto p-10 mb-10">
                 {/* About us content section */}
                 <p className="font-semibold text-[#C2410C] text-[13px]">THE FIVE W'S</p>
                 <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">Eveything you need to know</p>
@@ -161,7 +161,28 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="flex-1 w-full max-w-325 mx-auto p-10">
+            {/* Example sellable products divider section */}
+            <div className="w-full bg-[#1B1E1C] flex justify-center items-center h-16">
+                <div className="w-full max-w-325 flex flex-row justify-center items-center gap-12 p-1">
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">LUMBER</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">BRICK</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">TILE</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">DOORS</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">WINDOWS</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">FIXTURES</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">CABINETS</p>
+                    <p className="text-[#C2410C] font-bold text-[13px]">•</p>
+                    <p className="text-[#C9CFCB] font-bold text-[13px]">FLOORING</p>
+                </div>
+            </div>
+
+            <div className="flex-1 w-full max-w-325 mx-auto p-10 mb-10">
                 {/* Demo video content section */}
                 <p className="font-semibold text-[#C2410C] text-[13px]">SEE IT IN ACTION</p>
                 <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">From job site to new home</p>
