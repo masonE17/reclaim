@@ -165,7 +165,7 @@ export default function App() {
                 {/* Demo video content section */}
                 <p className="font-semibold text-[#C2410C] text-[13px]">SEE IT IN ACTION</p>
                 <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">From job site to new home</p>
-                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-4">in mintues.</p>
+                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-4 mb-10">in mintues.</p>
                 <img src="/demo-video-placeholder.png" alt="Demo video placeholder" className="w-full h-100 object-cover rounded-[5px]" />
             </div>
 
