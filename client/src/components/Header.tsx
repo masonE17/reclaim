@@ -11,7 +11,7 @@ type HeaderProps = {
 export default function Header({ isBrowse, isSell, isMessages, isCart }: HeaderProps) {
     return (
         // Header
-        <div className="sticky top-0 z-50 w-full bg-[#FFFFFF] flex justify-center items-center py-3 border-b border-[#DDE0D8]">
+        <div className="sticky top-0 z-50 w-full bg-[#FFFFFF] flex justify-center items-center py-3 border-b-2 border-[#DDE0D8]">
             <div className="w-full max-w-325 flex flex-row justify-between items-center p-1">
                 <Link to="/" className="flex flex-row justify-center items-center gap-1">
                     <img src="/ReClaim-icon.png" alt="ReClaim Logo" className="w-12 h-12" />
