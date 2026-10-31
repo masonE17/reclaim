@@ -41,8 +41,8 @@ export default function App() {
                             <p className="font-semibold text-[#1F5134] text-[12px]">LOCAL CONSTRUCTION MATERIAL MARKETPLACE</p>
                         </div>
                         <p className="font-extrabold text-[#1B1E1C] text-[64px]">Leftover materials</p>
-                        <p className="font-extrabold text-[#1B1E1C] text-[64px] -mt-8">deserve a second job</p>
-                        <p className="font-extrabold text-[#1B1E1C] text-[64px] -mt-8">site.</p>
+                        <p className="font-extrabold text-[#1B1E1C] text-[64px] -mt-9">deserve a second job</p>
+                        <p className="font-extrabold text-[#1B1E1C] text-[64px] -mt-9">site.</p>
                         <p className="text-[#48514C] text-[18px]">ReClaim lets contractors and renovators list reusable lumber, tile, fixtures, and more with photos, price, location, and pickup details, so good material gets resused instead of hauled to the landfill.</p>
                         <div className="w-full flex flex-row justify-start items-center gap-3 my-3">
                             <button className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Browse materials near you</button>
@@ -122,14 +122,51 @@ export default function App() {
                 </div>
             </div>
 
-            <div className="flex-1 w-full max-w-325 mx-auto border border-black p-1">
+            <div className="flex-1 w-full max-w-325 mx-auto p-10">
                 {/* About us content section */}
-                <p>ABOUT US</p>
+                <p className="font-semibold text-[#C2410C] text-[13px]">THE FIVE W'S</p>
+                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">Eveything you need to know</p>
+                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-3 mb-10">about ReClaim</p>
+                <div className="flex flex-row justify-center items-center gap-5">
+                    <div className="flex flex-col justify-center items-center gap-5">
+                        <div className="w-85 h-50 border border-[#D9D7D0] rounded-[5px] p-5">
+                            <p className="font-semibold text-[#C2410C] text-[13px] mb-1.5">01 • WHAT</p>
+                            <p className="font-bold text-[#1B1E1C] text-[22px] mb-1.5">A marketplace for resuable materials</p>
+                            <p className="text-[#48514C] text-[15px]">Surplus lumber, brick, tile, doors, fixtures, and other surplus building materials. Listed by the people who pulled them off the job.</p>
+                        </div>
+                        <div className="w-85 h-50 border border-[#D9D7D0] rounded-[5px] p-5">
+                            <p className="font-semibold text-[#C2410C] text-[13px] mb-1.5">02 • HOW</p>
+                            <p className="font-bold text-[#1B1E1C] text-[22px] mb-1.5">Simple and fast</p>
+                            <p className="text-[#48514C] text-[15px]">Upload a photo, add a price, and pickup loctation. Buyers message you, pay, and pick it up locally.</p>
+                        </div>
+                    </div>
+                    <div className=" w-130 h-105 bg-[#1F5134] rounded-[5px] p-5">
+                        <p className="font-semibold text-[#F7B48A] text-[13px] mb-1.5">03 • WHO</p>
+                        <p className="font-bold text-[#FFFFFF] text-[22px] mb-1.5">Built for contractors, renovators, and DIYers</p>
+                        <p className="text-[#D5E3DA] text-[16px] mb-5">ReClaim was built by a team of Georgia Tech students to connect people who have surplus building materials with people who can use them, keeping good material out of the landfill.</p>  
+                        <img src="/team-photo-placeholder.png" alt="Team placeholder" className="w-full h-50 object-cover rounded-[5px]" />
+                    </div>
+                    <div className="flex flex-col justify-center items-center gap-5">
+                        <div className="w-85 h-50 border border-[#D9D7D0] rounded-[5px] p-5">
+                            <p className="font-semibold text-[#C2410C] text-[13px] mb-1.5">04 • WHY</p>
+                            <p className="font-bold text-[#1B1E1C] text-[22px] mb-1.5">Less waste, lower costs</p>
+                            <p className="text-[#48514C] text-[15px]">Sellers recover value and skip disposal fees and buyers get quality materials for affordable prices.</p>
+                        </div>
+                        <div className="w-85 h-50 border border-[#D9D7D0] rounded-[5px] p-5">
+                            <p className="font-semibold text-[#C2410C] text-[13px] mb-1.5">05 • WHEN</p>
+                            <p className="font-bold text-[#1B1E1C] text-[22px] mb-1.5">Launching locally first</p>
+                            <p className="text-[#48514C] text-[15px]">Starting with pickup in Atlanta, GA. More regions and shipping coming later.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex-1 w-full max-w-325 mx-auto border border-black p-1">
+            <div className="flex-1 w-full max-w-325 mx-auto p-10">
                 {/* Demo video content section */}
-                <p>DEMO VIDEO</p>
+                <p className="font-semibold text-[#C2410C] text-[13px]">SEE IT IN ACTION</p>
+                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">From job site to new home</p>
+                <p className="font-extrabold text-[#1B1E1C] text-[44px] -mt-4">in mintues.</p>
+                <img src="/demo-video-placeholder.png" alt="Demo video placeholder" className="w-full h-100 object-cover rounded-[5px]" />
             </div>
 
             {/* Footer section - COMPONENTS */}
