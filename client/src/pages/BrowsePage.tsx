@@ -27,7 +27,7 @@ type Section = {
     listings: Listing[];
 };
 
-// Placeholder listings. Replace `tint` and `photoLabel` with real image URLs once you have them.
+// Placeholder listings, make sure to replace `tint` and `photoLabel` with real image URLs
 const SECTIONS: Section[] = [
     {
         id: "popular",
@@ -99,7 +99,7 @@ function ListingCard({ listing }: { listing: Listing }) {
         </Link>
     );
 }
-// ---------- END NEW ----------
+
 
 
 export default function BrowsePage() {
@@ -163,7 +163,7 @@ export default function BrowsePage() {
 
             <div className="flex-1 w-full max-w-325 mx-auto border border-black p-1">
                 {/* Add this page's code inside this div */}
-                {/* ---------- NEW: page content ---------- */}
+                
                 <div className="flex flex-col gap-10 px-1 pt-5 pb-12">
                     {/* Greeting banner */}
                     <div className="bg-[#1F4D31] rounded-xl px-6 py-5 flex flex-row justify-between items-center">
@@ -203,7 +203,7 @@ export default function BrowsePage() {
                         </button>
                     </div>
                 </div>
-                {/* ---------- END NEW ---------- */}
+                
                 {/*<p>Browse Page</p>*/}
             </div>
             <Footer />
