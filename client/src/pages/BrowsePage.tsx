@@ -6,65 +6,10 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { SECTIONS, type Listing } from "../data/listings";
 
-
-type Listing = {
-    id: number;
-    badge: string;
-    price: number;
-    title: string;
-    distance: string;
-    place: string;
-    posted: string;
-    photoLabel: string;
-    tint: string;
-};
-
-type Section = {
-    id: string;
-    title: string;
-    subtitle: string;
-    listings: Listing[];
-};
-
-// Placeholder listings, make sure to replace `tint` and `photoLabel` with real image URLs
-const SECTIONS: Section[] = [
-    {
-        id: "popular",
-        title: "Popular near you",
-        subtitle: "Most viewed this week",
-        listings: [
-            { id: 1, badge: "312 views", price: 480, title: "Reclaimed oak flooring, ~240 sq ft", distance: "2.1 mi", place: "Decatur", posted: "3 days ago", photoLabel: "oak flooring", tint: "#DCC7A1" },
-            { id: 2, badge: "287 views", price: 350, title: 'Cast iron clawfoot tub, 60"', distance: "5.4 mi", place: "Midtown", posted: "1 day ago", photoLabel: "clawfoot tub", tint: "#CDD0CB" },
-            { id: 3, badge: "241 views", price: 160, title: "Solid wood 6-panel doors (set of 4)", distance: "8.0 mi", place: "Marietta", posted: "4 days ago", photoLabel: "interior doors", tint: "#CDB895" },
-            { id: 4, badge: "198 views", price: 150, title: "2x4 studs, 8 ft — 60 pieces", distance: "3.7 mi", place: "East Point", posted: "2 days ago", photoLabel: "2x4 stack", tint: "#E3D5A9" },
-        ],
-    },
-    {
-        id: "new",
-        title: "Just posted",
-        subtitle: "Newest listings, refreshed as they come in",
-        listings: [
-            { id: 5, badge: "New", price: 90, title: "Porcelain tile 12x24, 18 boxes", distance: "1.2 mi", place: "Old Fourth Ward", posted: "12 min ago", photoLabel: "tile boxes", tint: "#BFC4BC" },
-            { id: 6, badge: "New", price: 120, title: "Vinyl double-hung windows (3)", distance: "6.3 mi", place: "Smyrna", posted: "40 min ago", photoLabel: "windows", tint: "#C4D0D6" },
-            { id: 7, badge: "New", price: 45, title: "Copper pipe offcuts, ~30 lb", distance: "4.4 mi", place: "Kirkwood", posted: "1 hr ago", photoLabel: "copper pipe", tint: "#D9A883" },
-            { id: 8, badge: "New", price: 100, title: "Used red brick, ~400", distance: "9.1 mi", place: "Tucker", posted: "2 hr ago", photoLabel: "brick pallet", tint: "#C28F7C" },
-        ],
-    },
-    {
-        id: "recommended",
-        title: "Recommended for you",
-        subtitle: "Based on your saved searches: cabinets, pavers",
-        listings: [
-            { id: 9, badge: "Saved search", price: 600, title: "Shaker kitchen cabinets, 10-piece set", distance: "7.5 mi", place: "Brookhaven", posted: "5 days ago", photoLabel: "cabinets", tint: "#D4D2C4" },
-            { id: 10, badge: "Saved search", price: 75, title: "Concrete pavers, 120 pcs", distance: "11 mi", place: "Stone Mountain", posted: "2 days ago", photoLabel: "pavers", tint: "#C8C3B6" },
-            { id: 11, badge: "For you", price: 40, title: '1/2" drywall sheets, 4x8 (14)', distance: "3.0 mi", place: "West End", posted: "6 days ago", photoLabel: "drywall", tint: "#D9D9D3" },
-            { id: 12, badge: "For you", price: 55, title: "Architectural shingles, 9 bundles", distance: "12 mi", place: "Lithonia", posted: "1 week ago", photoLabel: "shingles", tint: "#B9BDB8" },
-        ],
-    },
-];
-
-// A single listing card
+// ---------- NEW: listing card (data now lives in ../data/listings) ----------
+// A single listing card. Clicking it opens /listing/:id
 function ListingCard({ listing }: { listing: Listing }) {
     return (
         <Link
@@ -99,8 +44,7 @@ function ListingCard({ listing }: { listing: Listing }) {
         </Link>
     );
 }
-
-
+// ---------- END NEW ----------
 
 export default function BrowsePage() {
     const [moreOptionsOpen, setMoreOptionsOpen] = useState(false);
@@ -163,7 +107,7 @@ export default function BrowsePage() {
 
             <div className="flex-1 w-full max-w-325 mx-auto border border-black p-1">
                 {/* Add this page's code inside this div */}
-                
+                {/* ---------- NEW: page content ---------- */}
                 <div className="flex flex-col gap-10 px-1 pt-5 pb-12">
                     {/* Greeting banner */}
                     <div className="bg-[#1F4D31] rounded-xl px-6 py-5 flex flex-row justify-between items-center">
@@ -203,8 +147,7 @@ export default function BrowsePage() {
                         </button>
                     </div>
                 </div>
-                
-                {/*<p>Browse Page</p>*/}
+                {/* ---------- END NEW ---------- */}
             </div>
             <Footer />
         </div>
