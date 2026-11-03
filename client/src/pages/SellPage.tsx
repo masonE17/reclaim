@@ -6,10 +6,23 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
-import Header from "../components/Header";
+import Footer from "../components/Footer";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
+
 import Footer from "../components/Footer";
 import { createListing, type SaveResult } from "../lib/createListing";
-
+import { Link } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 type ListingForm = {
   title: string;
   category: string;
@@ -334,29 +347,36 @@ export default function SellPage() {
           <span className="text-red-700">*</span>
         </span>
 
-        <select
-          className={inputClass}
-          value={form[field]}
-          onChange={(event) =>
-            update(field, event.target.value)
-          }
-          aria-invalid={Boolean(errors[field])}
-          aria-describedby={
-            errors[field]
-              ? `${field}-error`
-              : undefined
-          }
-        >
-          <option value="">
-            Select {label.toLowerCase()}
-          </option>
-
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
+        <div className="relative">
+          <select
+            className={`${inputClass} appearance-none pr-10`}
+            value={form[field]}
+            onChange={(event) =>
+              update(field, event.target.value)
+            }
+            aria-invalid={Boolean(errors[field])}
+            aria-describedby={
+              errors[field]
+                ? `${field}-error`
+                : undefined
+            }
+          >
+            <option value="">
+              Select {label.toLowerCase()}
             </option>
-          ))}
-        </select>
+
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+
+          <FontAwesomeIcon
+            icon={faChevronDown}
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-[#5A6058]"
+          />
+        </div>
 
         {errors[field] && (
           <p
@@ -372,24 +392,47 @@ export default function SellPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header isSell />
+      {/* Header for sell page */}
+      <div className="sticky top-0 z-50 w-full bg-[#FFFFFF] flex justify-center items-center py-3 border-b-2 border-[#DDE0D8]">
+        <div className="w-full max-w-325 flex flex-row justify-between items-center p-1">
+          {/* Logo and link to home page */}
+          <Link to="/" className="flex flex-row justify-center items-center gap-1">
+            <img src="/ReClaim-icon.png" alt="ReClaim Logo" className="w-12 h-12" />
+            <p className="text-[#1B1F1A] font-bold text-[28px]">ReClaim</p>
+          </Link>
+          {/* Post listing and profile buttons */}
+          <div className="flex flex-row justify-center items-center gap-10">
+            <div className="flex flex-row justify-center items-center gap-6">
+              <button className="text-[#1B1E1C] bg-[#FFFFFF] hover:bg-[#F1F2EE] py-3 px-4 border border-[#C9CFCB] rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Cancel</button>
+              <button className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Post listing</button>
+            </div>
+            <Link to="/profile" className="flex flex-row justify-center items-center gap-2 pr-2">
+              <p className="text-[#5A6058] font-semibold text-[15px]">Profile</p>
+              <div className="w-10 h-10 rounded-full bg-[#E3E7DE] flex justify-center items-center">
+                <p className="text-[#5A6058] font-semibold text-[18px]">?</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
 
-      <main className="flex-1 bg-[#F7F8F5] px-4 py-10 text-[#1B1F1A]">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-7">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-[#2F6B47]">
-              ReClaim Marketplace
+
+      <main className="flex-1 bg-[#F7F8F5] text-[#1B1F1A]">
+        <div className="w-full max-w-325 mx-auto p-10">
+          <div className="mb-10">
+            <p className="font-semibold text-[#C2410C] text-[13px]">
+              RECLAIM MARKETPLACE
             </p>
 
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="font-extrabold text-[#1B1E1C] text-[44px] -mt-2">
               {preview
                 ? "Preview your listing"
-                : "Post an Item"}
+                : "Post an item"}
             </h1>
 
-            <p className="mt-2 text-[#5A6058]">
+            <p className="text-[#48514C] text-[18px]">
               {preview
-                ? "Review your details before moving on. This is a preview only; nothing has been published."
+                ? "Review your details before moving on. This is only a preview, so nothing has been published yet."
                 : "Give your reusable materials a second life. Fill in the details below to create a listing preview."}
             </p>
           </div>
@@ -407,21 +450,21 @@ export default function SellPage() {
               <div className="space-y-5 p-6 sm:p-8">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm font-medium text-[#2F6B47]">
+                    <p className="font-semibold text-[#C2410C] text-[13px] uppercase">
                       {form.category} · {form.condition}
                     </p>
 
-                    <h2 className="mt-1 text-2xl font-bold">
+                    <h2 className="font-extrabold text-[#1B1E1C] text-[36px]">
                       {form.title.trim()}
                     </h2>
                   </div>
 
-                  <p className="text-3xl font-bold text-[#2F6B47]">
+                  <p className="font-extrabold text-[#C2410C] text-[36px]">
                     ${Number(form.price).toFixed(2)}
                   </p>
                 </div>
 
-                <p className="whitespace-pre-wrap leading-relaxed">
+                <p className="whitespace-pre-wrap text-[#48514C] text-[18px] -mt-4">
                   {form.description.trim()}
                 </p>
 
@@ -433,11 +476,11 @@ export default function SellPage() {
                     ["Image", image?.name ?? ""],
                   ].map(([label, value]) => (
                     <div key={label}>
-                      <dt className="text-sm font-semibold text-[#5A6058]">
+                      <dt className="font-semibold text-[#55605A] text-[14px]">
                         {label}
                       </dt>
 
-                      <dd className="mt-1 break-words">
+                      <dd className="mt-1 wrap-break-word font-bold text-[#1B1E1C] text-[18px]">
                         {value}
                       </dd>
                     </div>
@@ -481,7 +524,7 @@ export default function SellPage() {
                     setPreview(false);
                     window.scrollTo(0, 0);
                   }}
-                  className="rounded-lg bg-[#2F6B47] px-6 py-3 font-semibold text-white hover:bg-[#25573A]"
+                  className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer"
                 >
                   {saved ? "Review saved details" : "Edit listing"}
                 </button>
@@ -590,7 +633,7 @@ export default function SellPage() {
                   Material photo
                 </h2>
 
-                <label className="block cursor-pointer rounded-xl border-2 border-dashed border-[#BDCBBB] bg-[#F7F9F5] p-6 text-center hover:border-[#2F6B47]">
+                <label className="block cursor-pointer rounded-xl border-2 border-dashed border-[#BDCBBB] bg-[#F7F9F5] p-6 text-center hover:border-[#2F6B47] focus-within:border-[#2F6B47]">
                   <span className="block font-semibold text-[#2F6B47]">
                     Choose a photo
                   </span>
@@ -599,8 +642,12 @@ export default function SellPage() {
                     JPG, PNG, or WebP · Up to 5 MB
                   </span>
 
+                  <span className="mt-4 block break-all text-sm text-[#5A6058]">
+                    {image ? image.name : "No file selected"}
+                  </span>
+
                   <input
-                    className="mt-4 block w-full text-sm"
+                    className="sr-only"
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     onChange={selectImage}
@@ -650,9 +697,9 @@ export default function SellPage() {
 
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-[#2F6B47] px-7 py-3 font-semibold text-white hover:bg-[#25573A] sm:w-auto"
+                  className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer"
                 >
-                  Preview listing →
+                  Preview listing <FontAwesomeIcon icon={faArrowRight} />
                 </button>
               </div>
             </form>
