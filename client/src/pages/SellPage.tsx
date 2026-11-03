@@ -1,12 +1,3 @@
-
-import {
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
-import Footer from "../components/Footer";
 import {
   useEffect,
   useRef,
