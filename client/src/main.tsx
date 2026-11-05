@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import BrowsePage from './pages/BrowsePage.tsx'
 import ListingPage from './pages/ListingPage.tsx'
 import SellPage from './pages/SellPage.tsx'
+import MyListingsPage from './pages/MyListingsPage.tsx'
 import MessagesPage from './pages/MessagesPage.tsx'
 import CartPage from './pages/CartPage.tsx'
 import ProfilePage from './pages/ProfilePage.tsx'
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/sell",
     element: <SellPage />,
+  },
+  {
+    path: "/my-listings",
+    element: <MyListingsPage />,
   },
   {
     path: "/messages",
