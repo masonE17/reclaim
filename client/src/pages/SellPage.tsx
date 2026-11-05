@@ -63,7 +63,7 @@ const inputClass =
 
 function validate(
   form: ListingForm,
-  image: File | null
+  images: File[]
 ): Errors {
   const errors: Errors = {};
 
@@ -112,8 +112,8 @@ function validate(
       "Enter a pickup location.";
   }
 
-  if (!image) {
-    errors.image = "Select a listing image.";
+  if (images.length === 0) {
+    errors.image = "Select at least one listing image.";
   }
 
   return errors;
@@ -123,13 +123,11 @@ export default function SellPage() {
   const [form, setForm] =
     useState<ListingForm>(initialForm);
 
-  const [image, setImage] =
-    useState<File | null>(null);
-
-  const [imageUrl, setImageUrl] =
-    useState<string | null>(null);
-
-  const imageUrlRef = useRef<string | null>(null);
+  // Local-only previews. Files are NOT stored in Supabase until Julian adds Storage.
+  const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const imageUrlsRef = useRef<string[]>([]);
+  const imageUrl = imageUrls[0] ?? null;
 
   const [imageError, setImageError] = useState("");
   const [errors, setErrors] = useState<Errors>({});
@@ -141,13 +139,10 @@ export default function SellPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const urlRef = imageUrlRef;
-
+    const urlsRef = imageUrlsRef;
     return () => {
-      if (urlRef.current) {
-        URL.revokeObjectURL(urlRef.current);
-        urlRef.current = null;
-      }
+      urlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+      urlsRef.current = [];
     };
   }, []);
 
@@ -163,70 +158,43 @@ export default function SellPage() {
     }));
   }
 
-  function clearImageUrl() {
-    if (imageUrlRef.current) {
-      URL.revokeObjectURL(imageUrlRef.current);
-      imageUrlRef.current = null;
-    }
-
-    setImageUrl(null);
-  }
-
-  function selectImage(
-    event: ChangeEvent<HTMLInputElement>
-  ) {
-    const file = event.target.files?.[0] ?? null;
-
+  function selectImage(event: ChangeEvent<HTMLInputElement>) {
+    const selected = Array.from(event.target.files ?? []);
     event.target.value = "";
-
-    if (!file) return;
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      setImageError(
-        "Choose a JPG, PNG, or WebP image."
-      );
+    if (selected.length === 0) return;
+    if (selected.some(file => !["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
+      setImageError("Only JPG, PNG, and WebP images are supported.");
       return;
     }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setImageError(
-        "The image must be 5 MB or smaller."
-      );
+    if (selected.some(file => file.size > 5 * 1024 * 1024)) {
+      setImageError("Each image must be 5 MB or smaller.");
       return;
     }
-
-    clearImageUrl();
-
-    const url = URL.createObjectURL(file);
-
-    imageUrlRef.current = url;
-
-    setImage(file);
-    setImageUrl(url);
+    if (images.length + selected.length > 5) {
+      setImageError("A listing can have up to 5 photos.");
+      return;
+    }
+    const urls = selected.map(file => URL.createObjectURL(file));
+    imageUrlsRef.current = [...imageUrlsRef.current, ...urls];
+    setImages(prev => [...prev, ...selected]);
+    setImageUrls(prev => [...prev, ...urls]);
     setImageError("");
-
-    setErrors((current) => ({
-      ...current,
-      image: undefined,
-    }));
+    setErrors(prev => ({ ...prev, image: undefined }));
   }
 
-  function removeImage() {
-    clearImageUrl();
-    setImage(null);
+  function removeImage(index: number) {
+    const url = imageUrlsRef.current[index];
+    if (url) URL.revokeObjectURL(url);
+    imageUrlsRef.current = imageUrlsRef.current.filter((_, i) => i !== index);
+    setImageUrls(prev => prev.filter((_, i) => i !== index));
+    setImages(prev => prev.filter((_, i) => i !== index));
     setImageError("");
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const nextErrors = validate(form, image);
+    const nextErrors = validate(form, images);
 
     setErrors(nextErrors);
 
@@ -241,7 +209,7 @@ export default function SellPage() {
 
   async function saveListing() {
     if (saving || saved) return;
-    const nextErrors = validate(form, image);
+    const nextErrors = validate(form, images);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0 || imageError) {
       setPreview(false);
@@ -391,11 +359,12 @@ export default function SellPage() {
             <img src="/ReClaim-icon.png" alt="ReClaim Logo" className="w-12 h-12" />
             <p className="text-[#1B1F1A] font-bold text-[28px]">ReClaim</p>
           </Link>
+          <Link to="/my-listings" className="rounded-md border border-[#C9CFCB] px-3 py-2 font-semibold text-[#1B1E1C] hover:bg-[#F1F2EE]">My Listings</Link>
           {/* Post listing and profile buttons */}
           <div className="flex flex-row justify-center items-center gap-10">
             <div className="flex flex-row justify-center items-center gap-6">
-              <button className="text-[#1B1E1C] bg-[#FFFFFF] hover:bg-[#F1F2EE] py-3 px-4 border border-[#C9CFCB] rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Cancel</button>
-              <button className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Post listing</button>
+              <Link to="/my-listings" className="text-[#1B1E1C] bg-[#FFFFFF] hover:bg-[#F1F2EE] py-3 px-4 border border-[#C9CFCB] rounded-[5px] font-semibold text-[15px]">Cancel</Link>
+              <button type="button" onClick={() => document.getElementById("seller-form")?.scrollIntoView({ behavior: "smooth" })} className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Post listing</button>
             </div>
             <Link to="/profile" className="flex flex-row justify-center items-center gap-2 pr-2">
               <p className="text-[#5A6058] font-semibold text-[15px]">Profile</p>
@@ -464,7 +433,7 @@ export default function SellPage() {
                     ["Quantity", form.quantity],
                     ["Dimensions", form.dimensions],
                     ["Pickup location", form.pickupLocation],
-                    ["Image", image?.name ?? ""],
+                    ["Images", `${images.length} selected (preview only)`],
                   ].map(([label, value]) => (
                     <div key={label}>
                       <dt className="font-semibold text-[#55605A] text-[14px]">
@@ -523,6 +492,7 @@ export default function SellPage() {
             </section>
           ) : (
             <form
+              id="seller-form"
               onSubmit={submit}
               noValidate
               className="space-y-7 rounded-2xl border border-[#DDE0D8] bg-white p-5 shadow-sm sm:p-8"
@@ -630,16 +600,17 @@ export default function SellPage() {
                   </span>
 
                   <span className="mt-1 block text-sm text-[#5A6058]">
-                    JPG, PNG, or WebP · Up to 5 MB
+                    Up to 5 JPG, PNG, or WebP photos · 5 MB per photo
                   </span>
 
                   <span className="mt-4 block break-all text-sm text-[#5A6058]">
-                    {image ? image.name : "No file selected"}
+                    {images.length ? `${images.length} photo(s) selected` : "No photos selected"}
                   </span>
 
                   <input
                     className="sr-only"
                     type="file"
+                    multiple
                     accept="image/jpeg,image/png,image/webp"
                     onChange={selectImage}
                     aria-label="Upload material photo"
@@ -655,27 +626,16 @@ export default function SellPage() {
                   </p>
                 )}
 
-                {imageUrl && (
-                  <div className="flex flex-wrap items-start gap-4 rounded-lg border border-[#DDE0D8] p-3">
-                    <img
-                      src={imageUrl}
-                      alt="Selected material preview"
-                      className="h-36 w-44 rounded-md object-cover"
-                    />
-
-                    <div className="min-w-0 flex-1">
-                      <p className="break-all text-sm font-medium">
-                        {image?.name}
-                      </p>
-
-                      <button
-                        type="button"
-                        onClick={removeImage}
-                        className="mt-3 text-sm font-semibold text-red-700 underline"
-                      >
-                        Remove photo
-                      </button>
-                    </div>
+                {imageUrls.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                    {imageUrls.map((url, index) => (
+                      <div key={url} className="rounded-lg border border-[#DDE0D8] p-2">
+                        <img src={url} alt={`Material photo ${index + 1}`} className="h-28 w-full rounded object-cover" />
+                        <p className="mt-1 truncate text-xs" title={images[index]?.name}>{images[index]?.name}</p>
+                        <button type="button" onClick={() => removeImage(index)}
+                          className="mt-2 text-sm font-semibold text-red-700 underline">Remove</button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </section>
@@ -683,7 +643,7 @@ export default function SellPage() {
               <div className="flex flex-col items-start gap-3 border-t border-[#DDE0D8] pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-[#5A6058]">
                   Fields marked * are required.
-                  Photos remain preview-only until storage is connected.
+                  All selected photos remain preview-only until Supabase Storage is connected.
                 </p>
 
                 <button
