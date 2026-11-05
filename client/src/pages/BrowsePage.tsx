@@ -6,45 +6,6 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
-import { SECTIONS, type Listing } from "../data/listings";
-
-// ---------- NEW: listing card (data now lives in ../data/listings) ----------
-// A single listing card. Clicking it opens /listing/:id
-function ListingCard({ listing }: { listing: Listing }) {
-    return (
-        <Link
-            to={`/listing/${listing.id}`}
-            className="bg-white border border-[#DDE0D8] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
-        >
-            {/* Photo placeholder (swap for an <img> when real photos exist) */}
-            <div
-                className="relative aspect-[4/3] w-full flex justify-center items-center"
-                style={{
-                    backgroundColor: listing.tint,
-                    backgroundImage:
-                        "repeating-linear-gradient(135deg, rgba(255,255,255,0.28) 0px, rgba(255,255,255,0.28) 10px, rgba(255,255,255,0) 10px, rgba(255,255,255,0) 20px)",
-                }}
-            >
-                <span className="absolute top-2 left-2 bg-[#1B1E1C] text-white font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[4px]">
-                    {listing.badge}
-                </span>
-                <span className="bg-white/80 text-[#3B403A] font-mono text-[11px] px-2 py-0.5 rounded-[3px]">
-                    [Photo: {listing.photoLabel}]
-                </span>
-            </div>
-
-            {/* Listing details */}
-            <div className="p-3 flex flex-col gap-1">
-                <p className="text-[#1B1E1C] font-extrabold text-[20px] leading-tight">${listing.price}</p>
-                <p className="text-[#1B1E1C] font-semibold text-[13px] leading-snug">{listing.title}</p>
-                <p className="text-[#7A8077] text-[11px]">
-                    {listing.distance} · {listing.place} · {listing.posted}
-                </p>
-            </div>
-        </Link>
-    );
-}
-// ---------- END NEW ----------
 
 export default function BrowsePage() {
     const [moreOptionsOpen, setMoreOptionsOpen] = useState(false);
@@ -107,47 +68,7 @@ export default function BrowsePage() {
 
             <div className="flex-1 w-full max-w-325 mx-auto border border-black p-1">
                 {/* Add this page's code inside this div */}
-                {/* ---------- NEW: page content ---------- */}
-                <div className="flex flex-col gap-10 px-1 pt-5 pb-12">
-                    {/* Greeting banner */}
-                    <div className="bg-[#1F4D31] rounded-xl px-6 py-5 flex flex-row justify-between items-center">
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white font-bold text-[20px]">Good afternoon, USER</p>
-                            <p className="text-[#D5E3D9] text-[13px]">Showing materials within 25 mi of [YOUR ZIP]</p>
-                        </div>
-                        <button className="text-white border border-[#6F9680] hover:bg-[#2A5E3D] px-4 py-2 rounded-[8px] font-semibold text-[13px] hover:cursor-pointer">
-                            Change location
-                        </button>
-                    </div>
-
-                    {/* Listing sections */}
-                    {SECTIONS.map((section) => (
-                        <section key={section.id} className="flex flex-col gap-3">
-                            <div className="flex flex-row justify-between items-end">
-                                <div className="flex flex-col">
-                                    <h2 className="text-[#1B1E1C] font-extrabold text-[26px] leading-tight">{section.title}</h2>
-                                    <p className="text-[#7A8077] text-[13px]">{section.subtitle}</p>
-                                </div>
-                                <Link to="/browse/all" className="text-[#1F4D31] font-bold text-[13px] underline underline-offset-2 hover:text-[#163820]">
-                                    See all
-                                </Link>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                {section.listings.map((listing) => (
-                                    <ListingCard key={listing.id} listing={listing} />
-                                ))}
-                            </div>
-                        </section>
-                    ))}
-
-                    {/* Load more */}
-                    <div className="flex justify-center">
-                        <button className="text-[#1B1E1C] bg-white hover:bg-[#F1F2EE] px-6 py-2 border border-[#C9CFCB] rounded-[8px] font-semibold text-[13px] hover:cursor-pointer">
-                            Load more listings
-                        </button>
-                    </div>
-                </div>
-                {/* ---------- END NEW ---------- */}
+                <p>Browse Page</p>
             </div>
             <Footer />
         </div>
