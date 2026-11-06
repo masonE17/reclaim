@@ -1,3 +1,5 @@
+import { uploadListingImages } from "../lib/uploadListingImages";
+
 import {
   useEffect,
   useRef,
@@ -208,33 +210,47 @@ export default function SellPage() {
   }
 
   async function saveListing() {
-    if (saving || saved) return;
-    const nextErrors = validate(form, images);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0 || imageError) {
-      setPreview(false);
-      return;
-    }
-    setSaving(true);
-    setSaveError("");
-    try {
-      const result = await createListing({
-        title: form.title.trim(),
-        category: form.category,
-        description: form.description.trim(),
-        price: Number(form.price),
-        quantity: Number(form.quantity),
-        condition: form.condition,
-        dimensions: form.dimensions.trim(),
-        pickup_location: form.pickupLocation.trim(),
-      });
-      setSaved(result);
-    } catch (error) {
-      setSaveError(error instanceof Error ? error.message : "Unable to save listing.");
-    } finally {
-      setSaving(false);
-    }
+  if (saving || saved) return;
+
+  const nextErrors = validate(form, images);
+  setErrors(nextErrors);
+
+  if (Object.keys(nextErrors).length > 0 || imageError) {
+    setPreview(false);
+    return;
   }
+
+  setSaving(true);
+  setSaveError("");
+
+  try {
+    // Step 1: Save listing information
+    const result = await createListing({
+      title: form.title.trim(),
+      category: form.category,
+      description: form.description.trim(),
+      price: Number(form.price),
+      quantity: Number(form.quantity),
+      condition: form.condition,
+      dimensions: form.dimensions.trim(),
+      pickup_location: form.pickupLocation.trim(),
+    });
+
+    // Step 2: Upload images to Supabase Storage
+    await uploadListingImages(result.listing.id, images);
+
+    // Step 3: Confirm completion
+    setSaved(result);
+  } catch (error) {
+    setSaveError(
+      error instanceof Error
+        ? error.message
+        : "Unable to complete listing submission."
+    );
+  } finally {
+    setSaving(false);
+  }
+}
 
   function textField(
     field: Field,
@@ -450,9 +466,9 @@ export default function SellPage() {
                 <div className="rounded-lg bg-[#EFF5EE] p-4 text-sm text-[#31573D]">
                   {saved
                     ? saved.demo
-                      ? "Demo listing saved only in this browser. It is NOT in Supabase or visible to teammates."
+                      ? "Photos will be uploaded to Supabase when you submit your listing."
                       : "Listing saved by the connected server."
-                    : "Review your listing and submit below. Photos are preview-only and are NOT uploaded or persisted yet."}
+                    : "Review your listing and submit below. Your listing and selected photos will be saved to Supabase."}
                 </div>
 
                 {saveError && (
