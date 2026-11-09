@@ -359,12 +359,11 @@ export default function SellPage() {
             <img src="/ReClaim-icon.png" alt="ReClaim Logo" className="w-12 h-12" />
             <p className="text-[#1B1F1A] font-bold text-[28px]">ReClaim</p>
           </Link>
-          <Link to="/my-listings" className="rounded-md border border-[#C9CFCB] px-3 py-2 font-semibold text-[#1B1E1C] hover:bg-[#F1F2EE]">My Listings</Link>
-          {/* Post listing and profile buttons */}
+          {/* My listings and profile buttons */}
           <div className="flex flex-row justify-center items-center gap-10">
             <div className="flex flex-row justify-center items-center gap-6">
               <Link to="/my-listings" className="text-[#1B1E1C] bg-[#FFFFFF] hover:bg-[#F1F2EE] py-3 px-4 border border-[#C9CFCB] rounded-[5px] font-semibold text-[15px]">Cancel</Link>
-              <button type="button" onClick={() => document.getElementById("seller-form")?.scrollIntoView({ behavior: "smooth" })} className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">Post listing</button>
+              <Link to="/my-listings" className="text-[#FFFFFF] bg-[#C2410C] hover:bg-[#9A3412] py-3 px-4 rounded-[5px] font-semibold text-[15px] hover:cursor-pointer">My Listings</Link>
             </div>
             <Link to="/profile" className="flex flex-row justify-center items-center gap-2 pr-2">
               <p className="text-[#5A6058] font-semibold text-[15px]">Profile</p>

@@ -94,7 +94,7 @@ function ListingDetails({ listing }: { listing: Listing }) {
                                 </p>
                             </div>
                             <Link to="/profile">
-                                <button className="text-[#1B1E1C] bg-white hover:bg-[#F1F2EE] px-4 py-2 border border-[#C9CFCB] rounded-[8px] font-semibold text-[13px] hover:cursor-pointer whitespace-nowrap">View profile</button>
+                                <button className="text-[#1B1E1C] bg-white hover:bg-[#F1F2EE] px-4 py-2 border border-[#C9CFCB] rounded-[5px] font-semibold text-[13px] hover:cursor-pointer whitespace-nowrap">View profile</button>
                             </Link>
                         </div>
                     )}
@@ -132,14 +132,14 @@ function ListingDetails({ listing }: { listing: Listing }) {
                             <button
                                 onClick={() => setSaved(!saved)}
                                 aria-label={saved ? "Remove from saved" : "Save listing"}
-                                className={`w-9 h-9 border border-[#C9CFCB] rounded-[8px] hover:bg-[#F1F2EE] hover:cursor-pointer ${saved ? "text-[#C2410C]" : "text-[#1B1E1C]"}`}
+                                className={`w-9 h-9 border border-[#C9CFCB] rounded-[5px] hover:bg-[#F1F2EE] hover:cursor-pointer ${saved ? "text-[#C2410C]" : "text-[#1B1E1C]"}`}
                             >
                                 <FontAwesomeIcon icon={saved ? faHeartSolid : faHeart} />
                             </button>
                             <button
                                 onClick={() => navigator.clipboard?.writeText(window.location.href)}
                                 aria-label="Copy link"
-                                className="w-9 h-9 border border-[#C9CFCB] rounded-[8px] text-[#1B1E1C] hover:bg-[#F1F2EE] hover:cursor-pointer"
+                                className="w-9 h-9 border border-[#C9CFCB] rounded-[5px] text-[#1B1E1C] hover:bg-[#F1F2EE] hover:cursor-pointer"
                             >
                                 <FontAwesomeIcon icon={faArrowUpFromBracket} />
                             </button>
@@ -148,7 +148,7 @@ function ListingDetails({ listing }: { listing: Listing }) {
 
                     {/* Main photo */}
                     <div
-                        className="relative aspect-[4/3] w-full flex justify-center items-center"
+                        className="relative aspect-4/3 w-full flex justify-center items-center"
                         style={{ backgroundColor: listing.tint, backgroundImage: STRIPES, filter: `brightness(${PHOTO_BRIGHTNESS[photoIndex]})` }}
                     >
                         <span className="bg-white/80 text-[#3B403A] font-mono text-[12px] px-2 py-1 rounded-[3px]">[Main photo: {listing.photoLabel}]</span>
@@ -194,9 +194,9 @@ function ListingDetails({ listing }: { listing: Listing }) {
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">
-                            <button className="bg-[#C2410C] hover:bg-[#9A3412] text-white py-3 rounded-[8px] font-bold text-[14px] hover:cursor-pointer">Add to cart</button>
+                            <button className="bg-[#C2410C] hover:bg-[#9A3412] text-white py-3 rounded-[5px] font-bold text-[14px] hover:cursor-pointer">Add to cart</button>
                             <Link to="/messages" className="block">
-                                <button className="w-full bg-[#1B1E1C] hover:bg-black text-white py-3 rounded-[8px] font-bold text-[14px] hover:cursor-pointer">Message seller</button>
+                                <button className="w-full bg-[#1B1E1C] hover:bg-black text-white py-3 rounded-[5px] font-bold text-[14px] hover:cursor-pointer">Message seller</button>
                             </Link>
                         </div>
                     </div>
