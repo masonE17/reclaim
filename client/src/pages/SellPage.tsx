@@ -426,7 +426,7 @@ export default function SellPage() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="font-semibold text-[#C2410C] text-[13px] uppercase">
-                      {form.category} · {form.condition}
+                      {form.category} Â· {form.condition}
                     </p>
 
                     <h2 className="font-extrabold text-[#1B1E1C] text-[36px]">
@@ -463,11 +463,7 @@ export default function SellPage() {
                 </dl>
 
                 <div className="rounded-lg bg-[#EFF5EE] p-4 text-sm text-[#31573D]">
-                  {saved
-                    ? saved.demo
-                      ? "Photos will be uploaded to Supabase when you submit your listing."
-                      : "Listing saved by the connected server."
-                    : "Review your listing and submit below. Your listing and selected photos will be saved to Supabase."}
+                  {saved ? "Listing and photos saved to Supabase." : "Review your listing and submit below. Your listing and selected photos will be saved to Supabase."}
                 </div>
 
                 {saveError && (
@@ -594,7 +590,7 @@ export default function SellPage() {
                 {textField(
                   "dimensions",
                   "Dimensions",
-                  "e.g. 8 ft × 6 in × 1 in"
+                  "e.g. 8 ft Ã— 6 in Ã— 1 in"
                 )}
 
                 {textField(
@@ -615,7 +611,7 @@ export default function SellPage() {
                   </span>
 
                   <span className="mt-1 block text-sm text-[#5A6058]">
-                    Up to 5 JPG, PNG, or WebP photos · 5 MB per photo
+                    Up to 5 JPG, PNG, or WebP photos Â· 5 MB per photo
                   </span>
 
                   <span className="mt-4 block break-all text-sm text-[#5A6058]">
