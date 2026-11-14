@@ -1,3 +1,4 @@
+import { supabase } from "./supabase";
 /** Seller submission boundary. Julian can replace this implementation once the API/schema is agreed. */
 export type CreateListingInput = {
   title: string;
@@ -25,42 +26,57 @@ const DEMO_STORAGE_KEY = "reclaim-demo-listings-v1";
  * Once VITE_LISTINGS_API_URL is configured, the code POSTs JSON to that URL.
  * The API must enforce authentication, authorization, schema validation and rate limits.
  */
-export async function createListing(input: CreateListingInput): Promise<SaveResult> {
-  const endpoint = import.meta.env.VITE_LISTINGS_API_URL?.trim();
-  if (!endpoint) {
-    const previous = getDemoListings();
-    const listing: SavedListing = {
-      ...input,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-    };
-    try {
-      localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify([listing, ...previous]));
-    } catch {
-      throw new Error("Browser storage is unavailable. The demo listing was not saved.");
-    }
-    return { listing, demo: true };
+export async function createListing(
+  input: CreateListingInput
+): Promise<SaveResult> {
+  // Require a signed-in seller
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("Please sign in before posting a listing.");
   }
 
-  let response: Response;
-  try {
-    response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      body: JSON.stringify(input),
-    });
-  } catch {
-    throw new Error("Could not connect to the listings server. Please try again.");
+  // Save the listing to Supabase
+  const { data, error } = await supabase
+    .from("listings")
+    .insert({
+      seller_id: user.id,
+      title: input.title,
+      category: input.category,
+      description: input.description,
+      price: input.price,
+      quantity: input.quantity,
+      condition: input.condition,
+      dimensions: input.dimensions,
+      location: input.pickup_location,
+      status: "available",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
   }
-  if (!response.ok) {
-    throw new Error(`Listing was not saved (server returned ${response.status}).`);
-  }
-  const value: unknown = await response.json();
-  if (!isSavedListing(value)) {
-    throw new Error("The server returned an unexpected listing response.");
-  }
-  return { listing: value, demo: false };
+
+  // Convert database fields back to the existing frontend format
+  return {
+    listing: {
+      id: data.id,
+      title: data.title,
+      category: data.category,
+      description: data.description,
+      price: data.price,
+      quantity: data.quantity,
+      condition: data.condition,
+      dimensions: data.dimensions,
+      pickup_location: data.location,
+      created_at: data.created_at,
+    },
+    demo: false,
+  };
 }
 
 export function getDemoListings(): SavedListing[] {

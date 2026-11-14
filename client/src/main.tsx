@@ -10,6 +10,7 @@ import MyListingsPage from './pages/MyListingsPage.tsx'
 import MessagesPage from './pages/MessagesPage.tsx'
 import CartPage from './pages/CartPage.tsx'
 import ProfilePage from './pages/ProfilePage.tsx'
+import DevAuthPage from "./pages/DevAuthPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,12 @@ const router = createBrowserRouter([
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+  path: "/dev-auth",
+  element: import.meta.env.DEV
+    ? <DevAuthPage />
+    : <div>Not found</div>,
   },
 ]);
 
