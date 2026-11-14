@@ -1,5 +1,3 @@
-import { uploadListingImages } from "../lib/uploadListingImages";
-
 import {
   useEffect,
   useRef,
@@ -10,12 +8,14 @@ import {
 
 import Footer from "../components/Footer";
 import { createListing, type SaveResult } from "../lib/createListing";
+import { uploadListingImages } from "../lib/uploadListingImages";
 import { Link } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
+
 type ListingForm = {
   title: string;
   category: string;
@@ -63,60 +63,28 @@ const conditions = [
 const inputClass =
   "w-full rounded-lg border border-[#C9D0C5] bg-white px-3 py-2.5 text-[#1B1F1A] outline-none focus:border-[#2F6B47] focus:ring-2 focus:ring-[#2F6B47]/20";
 
-function validate(
-  form: ListingForm,
-  images: File[]
-): Errors {
+function validate(form: ListingForm, images: File[]): Errors {
   const errors: Errors = {};
+  const price = Number(form.price);
+  const quantity = Number(form.quantity);
 
   if (!form.title.trim()) {
     errors.title = "Enter an item name.";
   } else if (form.title.trim().length > 120) {
     errors.title = "Use 120 characters or fewer.";
   }
-
-  if (!form.category) {
-    errors.category = "Select a category.";
-  }
-
-  if (!form.description.trim()) {
-    errors.description = "Enter a description.";
-  }
-
-  if (
-    !form.price.trim() ||
-    !Number.isFinite(Number(form.price)) ||
-    Number(form.price) < 0
-  ) {
+  if (!form.category) errors.category = "Select a category.";
+  if (!form.description.trim()) errors.description = "Enter a description.";
+  if (!form.price.trim() || !Number.isFinite(price) || price < 0) {
     errors.price = "Enter a valid price of $0 or more.";
   }
-
-  if (
-    !/^\d+$/.test(form.quantity.trim()) ||
-    Number(form.quantity) < 1 ||
-    !Number.isSafeInteger(Number(form.quantity))
-  ) {
-    errors.quantity =
-      "Enter a whole number of at least 1.";
+  if (!/^\d+$/.test(form.quantity.trim()) || !Number.isSafeInteger(quantity) || quantity < 1) {
+    errors.quantity = "Enter a whole number of at least 1.";
   }
-
-  if (!form.condition) {
-    errors.condition = "Select a condition.";
-  }
-
-  if (!form.dimensions.trim()) {
-    errors.dimensions =
-      "Enter dimensions, including units.";
-  }
-
-  if (!form.pickupLocation.trim()) {
-    errors.pickupLocation =
-      "Enter a pickup location.";
-  }
-
-  if (images.length === 0) {
-    errors.image = "Select at least one listing image.";
-  }
+  if (!form.condition) errors.condition = "Select a condition.";
+  if (!form.dimensions.trim()) errors.dimensions = "Enter dimensions, including units.";
+  if (!form.pickupLocation.trim()) errors.pickupLocation = "Enter a pickup location.";
+  if (images.length === 0) errors.image = "Select at least one listing image.";
 
   return errors;
 }
@@ -125,7 +93,7 @@ export default function SellPage() {
   const [form, setForm] =
     useState<ListingForm>(initialForm);
 
-  // Local-only previews. Files are NOT stored in Supabase until Julian adds Storage.
+  // Blob URLs are for browser previews; the files upload after listing creation.
   const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const imageUrlsRef = useRef<string[]>([]);
@@ -164,11 +132,15 @@ export default function SellPage() {
     const selected = Array.from(event.target.files ?? []);
     event.target.value = "";
     if (selected.length === 0) return;
-    if (selected.some(file => !["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    const maxFileSize = 5 * 1024 * 1024;
+
+    if (selected.some((file) => !allowedTypes.includes(file.type))) {
       setImageError("Only JPG, PNG, and WebP images are supported.");
       return;
     }
-    if (selected.some(file => file.size > 5 * 1024 * 1024)) {
+    if (selected.some((file) => file.size > maxFileSize)) {
       setImageError("Each image must be 5 MB or smaller.");
       return;
     }
@@ -176,81 +148,72 @@ export default function SellPage() {
       setImageError("A listing can have up to 5 photos.");
       return;
     }
-    const urls = selected.map(file => URL.createObjectURL(file));
+
+    const urls = selected.map((file) => URL.createObjectURL(file));
     imageUrlsRef.current = [...imageUrlsRef.current, ...urls];
-    setImages(prev => [...prev, ...selected]);
-    setImageUrls(prev => [...prev, ...urls]);
+    setImages((current) => [...current, ...selected]);
+    setImageUrls((current) => [...current, ...urls]);
     setImageError("");
-    setErrors(prev => ({ ...prev, image: undefined }));
+    setErrors((current) => ({ ...current, image: undefined }));
   }
 
   function removeImage(index: number) {
     const url = imageUrlsRef.current[index];
     if (url) URL.revokeObjectURL(url);
+
     imageUrlsRef.current = imageUrlsRef.current.filter((_, i) => i !== index);
-    setImageUrls(prev => prev.filter((_, i) => i !== index));
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImageUrls((current) => current.filter((_, i) => i !== index));
+    setImages((current) => current.filter((_, i) => i !== index));
     setImageError("");
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     const nextErrors = validate(form, images);
-
     setErrors(nextErrors);
 
-    if (
-      Object.keys(nextErrors).length === 0 &&
-      !imageError
-    ) {
-      setPreview(true);
-      window.scrollTo(0, 0);
-    }
+    if (Object.keys(nextErrors).length > 0 || imageError) return;
+
+    setPreview(true);
+    window.scrollTo(0, 0);
   }
 
   async function saveListing() {
-  if (saving || saved) return;
+    if (saving || saved) return;
 
-  const nextErrors = validate(form, images);
-  setErrors(nextErrors);
+    const nextErrors = validate(form, images);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0 || imageError) {
+      setPreview(false);
+      return;
+    }
 
-  if (Object.keys(nextErrors).length > 0 || imageError) {
-    setPreview(false);
-    return;
+    setSaving(true);
+    setSaveError("");
+
+    try {
+      // Create the listing first so uploaded photos can reference its ID.
+      const result = await createListing({
+        title: form.title.trim(),
+        category: form.category,
+        description: form.description.trim(),
+        price: Number(form.price),
+        quantity: Number(form.quantity),
+        condition: form.condition,
+        dimensions: form.dimensions.trim(),
+        pickup_location: form.pickupLocation.trim(),
+      });
+
+      await uploadListingImages(result.listing.id, images);
+      setSaved(result);
+    } catch (error) {
+      setSaveError(
+        error instanceof Error ? error.message : "Unable to complete listing submission."
+      );
+    } finally {
+      setSaving(false);
+    }
   }
-
-  setSaving(true);
-  setSaveError("");
-
-  try {
-    // Step 1: Save listing information
-    const result = await createListing({
-      title: form.title.trim(),
-      category: form.category,
-      description: form.description.trim(),
-      price: Number(form.price),
-      quantity: Number(form.quantity),
-      condition: form.condition,
-      dimensions: form.dimensions.trim(),
-      pickup_location: form.pickupLocation.trim(),
-    });
-
-    // Step 2: Upload images to Supabase Storage
-    await uploadListingImages(result.listing.id, images);
-
-    // Step 3: Confirm completion
-    setSaved(result);
-  } catch (error) {
-    setSaveError(
-      error instanceof Error
-        ? error.message
-        : "Unable to complete listing submission."
-    );
-  } finally {
-    setSaving(false);
-  }
-}
 
   function textField(
     field: Field,
@@ -271,20 +234,8 @@ export default function SellPage() {
         <input
           className={inputClass}
           type={type}
-          min={
-            type === "number"
-              ? field === "quantity"
-                ? 1
-                : 0
-              : undefined
-          }
-          step={
-            type === "number"
-              ? field === "quantity"
-                ? 1
-                : "0.01"
-              : undefined
-          }
+          min={type === "number" ? (field === "quantity" ? 1 : 0) : undefined}
+          step={type === "number" ? (field === "quantity" ? 1 : "0.01") : undefined}
           value={form[field]}
           placeholder={placeholder}
           onChange={(event) =>
@@ -464,9 +415,7 @@ export default function SellPage() {
 
                 <div className="rounded-lg bg-[#EFF5EE] p-4 text-sm text-[#31573D]">
                   {saved
-                    ? saved.demo
-                      ? "Photos will be uploaded to Supabase when you submit your listing."
-                      : "Listing saved by the connected server."
+                    ? "Listing and photos saved to Supabase."
                     : "Review your listing and submit below. Your listing and selected photos will be saved to Supabase."}
                 </div>
 
@@ -658,7 +607,7 @@ export default function SellPage() {
               <div className="flex flex-col items-start gap-3 border-t border-[#DDE0D8] pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-[#5A6058]">
                   Fields marked * are required.
-                  All selected photos remain preview-only until Supabase Storage is connected.
+                  Selected photos are uploaded to Supabase when you submit the listing.
                 </p>
 
                 <button
